@@ -61,6 +61,7 @@ public class MapViewActivity extends AppCompatActivity {
 
         marker = new Marker(map);
         map.getOverlays().add(marker);
+
     }
 
     @Override
@@ -87,6 +88,7 @@ public class MapViewActivity extends AppCompatActivity {
 
                 GeoPoint currentLocation = new GeoPoint(latitude, longitude);
                 mapController.setCenter(currentLocation);
+                mapController.setZoom(21.25);
 
                 marker.setPosition(currentLocation);
                 marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -96,6 +98,7 @@ public class MapViewActivity extends AppCompatActivity {
         };
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10, locationListener);
+
     }
 
     @Override
@@ -137,7 +140,6 @@ public class MapViewActivity extends AppCompatActivity {
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(this, permission)
                     != PackageManager.PERMISSION_GRANTED) {
-                // Permission is not granted
                 permissionsToRequest.add(permission);
             }
         }
