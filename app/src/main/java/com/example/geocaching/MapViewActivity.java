@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.widget.Toast;
@@ -37,6 +38,8 @@ public class MapViewActivity extends AppCompatActivity {
     private LocationProvider locationProvider;
     private LocationListener locationListener;
     private Marker marker;
+
+    private Vibrator vibrator;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -94,11 +97,13 @@ public class MapViewActivity extends AppCompatActivity {
                 marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
                 System.out.println("The current location is: " + latitude + ", " + longitude);
+                IsCloseTo(location);
             }
         };
 
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10000, 10, locationListener);
 
+        vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
     }
 
     @Override
@@ -118,6 +123,19 @@ public class MapViewActivity extends AppCompatActivity {
     private void enableLocationSettings() {
         Intent settingsIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         startActivity(settingsIntent);
+    }
+
+    private void IsCloseTo(Location location) {
+        GeoPoint testGeoPoint = new GeoPoint(49.97481595539698, 9.132599140851811);
+        Location testLocation = new Location("");
+        testLocation.setLatitude(testGeoPoint.getLatitude());
+        testLocation.setLongitude(testGeoPoint.getLongitude());
+
+        double distance = location.distanceTo(testLocation);
+        if(distance < 50) {
+            Toast.makeText(context, "testLocation", Toast.LENGTH_LONG).show();
+            vibrator.vibrate(500);
+        }
     }
 
     @Override
