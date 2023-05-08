@@ -150,6 +150,7 @@ public class MapViewActivity extends AppCompatActivity {
                     this,
                     permissionsToRequest.toArray(new String[0]),
                     REQUEST_PERMISSIONS_REQUEST_CODE);
+
         }
     }
 
