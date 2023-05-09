@@ -38,8 +38,10 @@ public class MapViewActivity extends AppCompatActivity {
     private LocationProvider locationProvider;
     private LocationListener locationListener;
     private Marker marker;
-
+    private static int level = 0;
     private Vibrator vibrator;
+
+    private ArrayList<GeoPoint> geoPoints;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,9 @@ public class MapViewActivity extends AppCompatActivity {
 
         marker = new Marker(map);
         map.getOverlays().add(marker);
+
+        geoPoints = new ArrayList<>();
+        geoPoints.add(new GeoPoint(49.97481595539698, 9.132599140851811));
 
     }
 
@@ -110,6 +115,8 @@ public class MapViewActivity extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
+        System.out.println("You are level " + level + " now.");
+
         map.onResume();
     }
 
@@ -126,15 +133,29 @@ public class MapViewActivity extends AppCompatActivity {
     }
 
     private void IsCloseTo(Location location) {
-        GeoPoint testGeoPoint = new GeoPoint(49.97481595539698, 9.132599140851811);
-        Location testLocation = new Location("");
-        testLocation.setLatitude(testGeoPoint.getLatitude());
-        testLocation.setLongitude(testGeoPoint.getLongitude());
+        if(level < geoPoints.size()) {
 
-        double distance = location.distanceTo(testLocation);
-        if(distance < 50) {
-            Toast.makeText(context, "testLocation", Toast.LENGTH_LONG).show();
-            vibrator.vibrate(500);
+            GeoPoint testGeoPoint = geoPoints.get(level);
+            Location testLocation = new Location("");
+            testLocation.setLatitude(testGeoPoint.getLatitude());
+            testLocation.setLongitude(testGeoPoint.getLongitude());
+
+            double distance = location.distanceTo(testLocation);
+            if (distance < 50) {
+
+                switch (level) {
+                    case 0:
+                        Toast.makeText(context, "testLocation", Toast.LENGTH_LONG).show();
+                        vibrator.vibrate(500);
+
+                        Intent nextPage = new Intent(this, MainActivity2.class);
+                        startActivity(nextPage);
+
+                        level++;
+
+                        break;
+                }
+            }
         }
     }
 
